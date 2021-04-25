@@ -39,6 +39,12 @@ class App extends Component {
 
   }
 
+  rmComentario = (comentario) => {
+    let lista = this.state.comentarios;
+    lista = lista.filter(c => c !== comentario)
+    this.setState({ comentarios: lista })
+  }
+
   digitando = (e) => {
     const {name, value} = e.target;
     this.setState({ novoComentario: {...this.state.novoComentario, [name]: value} })
@@ -54,7 +60,8 @@ class App extends Component {
             key={idx}
             nome={comentario.nome} 
             email={comentario.email} 
-            data={comentario.data}>
+            data={comentario.data}
+            onRemove={this.rmComentario.bind(this, comentario)}>
             {comentario.mensagem}
           </Comentario>
         ))}
