@@ -19,25 +19,29 @@ class App extends Component {
         data: new Date(2021, 3, 19),
         mensagem: 'Ola'
       },
-    ]
+    ],
+    novoComentario:{
+      nome: '',
+      email: '',
+      mensagem: ''
+    }
   }
 
-  addComentario = () => {
+  addComentario = (e) => {
+    e.preventDefault();
     console.log('add comentario...')
 
-    const novoComentario = {
-      nome: 'Pedro',
-      email: 'pedro@mail.com',
-      data: new Date(2021, 3, 19),
-      mensagem: 'Ola pessoal!'
-    }
+    const novoComentario = {...this.state.novoComentario, data: new Date()}
+    this.setState({ 
+      comentarios: [...this.state.comentarios, novoComentario],
+      novoComentario: { nome: '', email: '', mensagem: '' }
+    });
 
-    // let lista = this.state.comentarios;
-    // lista.push(novoComentario);
-    // this.setState({ comentarios: lista });
+  }
 
-    this.setState({ comentarios: [...this.state.comentarios, novoComentario] });
-
+  digitando = (e) => {
+    const {name, value} = e.target;
+    this.setState({ novoComentario: {...this.state.novoComentario, [name]: value} })
   }
 
   render() {
@@ -55,7 +59,35 @@ class App extends Component {
           </Comentario>
         ))}
 
-        <button onClick={this.addComentario}>Add comentário</button>
+        <form method="post" onSubmit={this.addComentario}>
+          <h2>Adicionar Comentário</h2>
+
+          <div>
+            <input 
+              type="text" 
+              name="nome" 
+              value={this.state.novoComentario.nome}
+              onChange={this.digitando}
+              placeholder="Digite seu nome" />
+          </div>
+          <div>
+            <input 
+              type="email" 
+              name="email"
+              value={this.state.novoComentario.email} 
+              onChange={this.digitando}
+              placeholder="Digite seu email" />
+          </div>
+          <div>
+            <textarea 
+              name="mensagem"
+              value={this.state.novoComentario.mensagem}
+              onChange={this.digitando} 
+              rows="4" />
+          </div>
+
+          <button type="submit">Adicionar Comentário</button>
+        </form>
       </div>
     );
   }
